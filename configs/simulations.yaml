@@ -6,4 +6,7 @@ temperature:
   noise_mean: 0
   noise_std: 3
   include_trend: true
+  trend_slope: 0.0006
+  trend_initial_value: 0.0
+  trend_growth_rate: 0.0
   type_of_trend: linear

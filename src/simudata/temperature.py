@@ -5,6 +5,7 @@ from src.simudata.seasonality import sinusoidal_seasonality
 from src.simudata.trend import linear_trend, exponential_trend
 from src.simudata.noise import gaussian_noise
 
+
 def simulate_temperature(
     n: int = 10000,
     intercept: float = 15.0,
@@ -18,8 +19,8 @@ def simulate_temperature(
     trend_growth_rate: float = 0.0,
     noise_mean: float = 0.0,
     noise_std: float = 3.0,
-    device:torch.device | str ="mps",
-    dtype: torch.dtype = torch.float32
+    device: torch.device | str = "mps",
+    dtype: torch.dtype = torch.float32,
 ) -> torch.Tensor:
     """
     Simulate temperature observations with seasonality, trend,
@@ -59,6 +60,10 @@ def simulate_temperature(
         Mean of the Gaussian noise.
     noise_std : float, optional
         Standard deviation of the Gaussian noise.
+    device : torch.device or str, optional
+        Device on which to create the simulated data.
+    dtype : torch.dtype, optional
+        Data type of the simulated data.
 
     Returns
     -------
@@ -77,7 +82,7 @@ def simulate_temperature(
             "type_of_trend must be either 'linear' or 'exponential'."
         )
 
-    t = torch.arange(n, dtype=torch.float32).to(device=device, dtype=dtype)
+    t = torch.arange(n, device=device)
 
     # Seasonal component
     seasonality = sinusoidal_seasonality(
@@ -85,26 +90,24 @@ def simulate_temperature(
         period=period,
         amplitude=amplitude,
         phase=phase,
-    ).to(device=device, dtype=dtype)
-
+    )
 
     # Trend component
-    trend = torch.zeros_like(t).to(device=device, dtype=dtype)
-
     if include_trend:
         if type_of_trend == "linear":
             trend = linear_trend(
                 t=t,
                 intercept=0.0,
                 slope=trend_slope,
-            ).to(device=device, dtype=dtype)
-
+            )
         else:
             trend = exponential_trend(
                 t=t,
                 initial_value=trend_initial_value,
                 growth_rate=trend_growth_rate,
-            ).to(device=device, dtype=dtype)
+            )
+    else:
+        trend = torch.zeros_like(t)
 
     # Random noise
     epsilon = gaussian_noise(
@@ -112,7 +115,7 @@ def simulate_temperature(
         mean=noise_mean,
         std=noise_std,
         dtype=dtype,
-        device=device
+        device=device,
     )
 
     return intercept + seasonality + trend + epsilon
