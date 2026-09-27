@@ -1,0 +1,9 @@
+temperature:
+  n: 10000
+  intercept: 15
+  amplitude: 10
+  period: 365
+  noise_mean: 0
+  noise_std: 3
+  include_trend: true
+  type_of_trend: linear
