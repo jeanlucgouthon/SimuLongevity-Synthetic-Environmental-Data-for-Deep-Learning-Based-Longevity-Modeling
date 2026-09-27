@@ -93,3 +93,13 @@ SimuData/
     ├── test_temperature.py
     ├── test_humidity.py
     └── test_pollution.py
+
+
+
+
+| Pollutant | Typical ambient concentration | Possible peaks | Unit |
+|-----------|-------------------------------|----------------|------|
+| PM2.5     | 5–20                          | >50, sometimes >100 | µg/m³ |
+| NO₂       | 5–30                          | >50–100        | µg/m³ |
+| O₃        | 40–100                        | >100–150       | µg/m³ |
+| CO        | 0.2–2                         | Several mg/m³  | mg/m³ |

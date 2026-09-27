@@ -10,3 +10,42 @@ temperature:
   trend_initial_value: 0.0
   trend_growth_rate: 0.0
   type_of_trend: linear
+
+humidity:
+  intercept: 75.0
+  slope: 0.5
+  temperature_bias: 15.0
+  noise_mean: 0.0
+  noise_std: 8.0
+
+pm25:
+  intercept: 2.0
+  temperature_slope: 0.15
+  humidity_slope: 0.10
+  noise_mean: 0.0
+  noise_std: 0.30
+
+no2:
+  intercept: 2.0
+  temperature_slope: 0.08
+  humidity_slope: 0.15
+  noise_mean: 0.0
+  noise_std: 0.25
+
+o3:
+  intercept: 4.0
+  temperature_slope: 0.15
+  humidity_slope: -0.08
+  temperature_squared_slope: 0.05
+  temperature_humidity_slope: -0.04
+  noise_mean: 0.0
+  noise_std: 0.25
+
+co:
+  intercept: -0.70
+  temperature_slope: -0.10
+  humidity_slope: 0.06
+  humidity_log_slope: 0.08
+  temperature_humidity_slope: 0.03
+  noise_mean: 0.0
+  noise_std: 0.25
