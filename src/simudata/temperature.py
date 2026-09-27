@@ -18,6 +18,8 @@ def simulate_temperature(
     trend_growth_rate: float = 0.0,
     noise_mean: float = 0.0,
     noise_std: float = 3.0,
+    device:torch.device | str ="mps",
+    dtype: torch.dtype = torch.float32
 ) -> torch.Tensor:
     """
     Simulate temperature observations with seasonality, trend,
@@ -75,7 +77,7 @@ def simulate_temperature(
             "type_of_trend must be either 'linear' or 'exponential'."
         )
 
-    t = torch.arange(n, dtype=torch.float32)
+    t = torch.arange(n, dtype=torch.float32).to(device=device, dtype=dtype)
 
     # Seasonal component
     seasonality = sinusoidal_seasonality(
@@ -83,10 +85,11 @@ def simulate_temperature(
         period=period,
         amplitude=amplitude,
         phase=phase,
-    )
+    ).to(device=device, dtype=dtype)
+
 
     # Trend component
-    trend = torch.zeros_like(t)
+    trend = torch.zeros_like(t).to(device=device, dtype=dtype)
 
     if include_trend:
         if type_of_trend == "linear":
@@ -94,20 +97,22 @@ def simulate_temperature(
                 t=t,
                 intercept=0.0,
                 slope=trend_slope,
-            )
+            ).to(device=device, dtype=dtype)
 
         else:
             trend = exponential_trend(
                 t=t,
                 initial_value=trend_initial_value,
                 growth_rate=trend_growth_rate,
-            )
+            ).to(device=device, dtype=dtype)
 
     # Random noise
     epsilon = gaussian_noise(
         n=n,
         mean=noise_mean,
         std=noise_std,
+        dtype=dtype,
+        device=device
     )
 
     return intercept + seasonality + trend + epsilon

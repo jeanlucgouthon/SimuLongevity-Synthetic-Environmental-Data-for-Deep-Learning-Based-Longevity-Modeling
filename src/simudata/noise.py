@@ -5,42 +5,55 @@ from src.simudata.distributions import simualate_normal
 def gaussian_noise(
     n: int,
     mean: float = 0.0,
-    std: float = 1.0
+    std: float = 1.0,
+    device: torch.device | str = "mps",
+    dtype: torch.dtype = torch.float32,
 ) -> torch.Tensor:
     """
-    Generate random noise from a normal distribution.
-
-    The noise is sampled from a normal distribution with the
-    specified mean and standard deviation.
+    Generate random noise from a Gaussian distribution.
 
     Parameters
     ----------
     n : int
         Number of noise values to generate.
     mean : float, optional
-        Mean of the normal distribution.
+        Mean of the Gaussian distribution.
     std : float, optional
-        Standard deviation of the normal distribution. Must be
+        Standard deviation of the Gaussian distribution. Must be
         strictly positive.
+    device : torch.device or str, optional
+        Device on which to create the tensor.
+    dtype : torch.dtype, optional
+        Data type of the generated tensor.
 
     Returns
     -------
     torch.Tensor
         A one-dimensional tensor containing `n` samples from the
-        normal distribution.
+        Gaussian distribution.
 
     Raises
     ------
     ValueError
-        If `std` is not strictly positive.
+        If `n` is negative or `std` is not strictly positive.
 
     Examples
     --------
-    >>> epsilon = noise(n=365, mean=0.0, std=1.0)
+    >>> epsilon = gaussian_noise(n=365, mean=0.0, std=1.0)
     >>> epsilon.shape
     torch.Size([365])
     """
-    if std <= 0.0:
-        raise ValueError("Std must be a positive float.")
 
-    return simualate_normal(n, mean, std)
+    if n < 0:
+        raise ValueError("n must be non-negative.")
+
+    if std <= 0.0:
+        raise ValueError("std must be strictly positive.")
+
+    return torch.normal(
+        mean=mean,
+        std=std,
+        size=(n,),
+        device=device,
+        dtype=dtype,
+    )
